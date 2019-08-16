@@ -7,7 +7,7 @@ The script uses following external API's:
 - [telegram-api](https://api.telegram.org)
 - [devman-api](https://dvmn.org/api/long_polling)
 
-Once, you run the script you'll receive notification messages in your telegram account.
+Once, you run the script you'll receive notification messages to your telegram account.
 
 ## How to install
 Python3 should be already installed.
