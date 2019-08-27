@@ -12,8 +12,8 @@ import time
 
 def send_to_telegram(text, chat_id, token):
     # http://spys.one/proxys/US/
-    proxy_url = getenv('HTTPS_PROXY')
-    environ['HTTPS_PROXY'] = proxy_url
+    # proxy_url = getenv('HTTPS_PROXY')
+    # environ['HTTPS_PROXY'] = proxy_url
     bot = telegram.Bot(token=token)
     bot.send_message(chat_id=chat_id, text=text)
 
