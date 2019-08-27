@@ -8,6 +8,7 @@ from os import getenv
 import telegram
 from telegram.error import NetworkError
 import time
+import logging
 
 
 def send_to_telegram(text, chat_id, token):
@@ -29,6 +30,7 @@ def run_bot(
     devman_url = 'https://dvmn.org/'
     headers = {'Authorization': 'Token {}'.format(devman_token)}
     params = {'timestamp': ''}
+    logging.info("Бот запущен")
     while True:
         try:
             response = requests.get(api_url, headers=headers, params=params)
