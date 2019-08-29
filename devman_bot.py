@@ -26,7 +26,6 @@ def send_to_telegram(text, chat_id, token):
     # http://spys.one/proxys/US/
     # proxy_url = getenv('HTTPS_PROXY')
     # environ['HTTPS_PROXY'] = proxy_url
-    bot = telegram.Bot(token=token)
     bot.send_message(chat_id=chat_id, text=text)
 
 
@@ -44,6 +43,7 @@ def run_bot(
     logger.info("Бот запущен")
     while True:
         try:
+            a = 1/0
             response = requests.get(api_url, headers=headers, params=params)
             response.raise_for_status()
             json_data = response.json()
@@ -69,11 +69,12 @@ def run_bot(
         except NetworkError as error:
             print('Error during send to Telegram :\n{}'.format(error))
             time.sleep(5)
+        except ZeroDivisionError as e:
+            logger.error(e)
 
 
 if __name__ == '__main__':
     load_dotenv()
-    logger = get_logger()
     devman_token = getenv('DEVMAN_TOKEN')
     chat_id = getenv('TELEGRAM_CHANNEL_NAME')
     bot_token = getenv('TELEGRAM_BOT_TOKEN')
@@ -83,6 +84,19 @@ if __name__ == '__main__':
     good_message = 'У вас проверили работу "{}"\n' \
                    'Преподавателю все понравилось, ' \
                    'можно приступать к следующему уроку: {}modules!'
+
+    bot = telegram.Bot(token=bot_token)
+
+    class BotLogger(logging.Handler):
+        def emit(self, record):
+            log_entry = self.format(record)
+            log_entry.format('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+            bot.send_message(chat_id=chat_id, text=log_entry)
+
+
+    logger = logging.getLogger('BotLogger')
+    logger.setLevel(logging.INFO)
+    logger.addHandler(BotLogger())
     run_bot(
         devman_token=devman_token,
         chat_id=chat_id,
