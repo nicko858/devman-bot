@@ -6,18 +6,14 @@ from dotenv import load_dotenv
 from os import getenv
 import telegram
 from telegram.error import NetworkError
+import traceback
 import time
 import logging
-
-
-def send_to_telegram(text, chat_id, token):
-    bot.send_message(chat_id=chat_id, text=text)
 
 
 def run_bot(
         devman_token=None,
         chat_id=None,
-        bot_token=None,
         bad_message=None,
         good_message=None
 ):
@@ -43,7 +39,7 @@ def run_bot(
                             attempt['lesson_title'],
                             devman_url
                         )
-                    send_to_telegram(message, chat_id, bot_token)
+                    bot.send_message(chat_id=chat_id, text=message)
                 params['timestamp'] = json_data['last_attempt_timestamp']
             if json_data['status'] == 'timeout':
                 params['timestamp'] = json_data['timestamp_to_request']
@@ -54,7 +50,9 @@ def run_bot(
             ))
             time.sleep(5)
         except NetworkError as error:
-            print('Возникла ошибка при обращении к Telegram :\n{}'.format(error))
+            print('Возникла ошибка при обращении к Telegram :\n{}'.format(
+                traceback.print_exc()
+            ))
             time.sleep(5)
 
 
@@ -84,7 +82,6 @@ if __name__ == '__main__':
     run_bot(
         devman_token=devman_token,
         chat_id=chat_id,
-        bot_token=bot_token,
         bad_message=bad_message,
         good_message=good_message
     )
