@@ -11,6 +11,17 @@ import time
 import logging
 
 
+def get_logger():
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+    handler = logging.StreamHandler()
+    handler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    return logger
+
+
 def send_to_telegram(text, chat_id, token):
     # http://spys.one/proxys/US/
     # proxy_url = getenv('HTTPS_PROXY')
@@ -30,7 +41,7 @@ def run_bot(
     devman_url = 'https://dvmn.org/'
     headers = {'Authorization': 'Token {}'.format(devman_token)}
     params = {'timestamp': ''}
-    logging.info("Бот запущен")
+    logger.info("Бот запущен")
     while True:
         try:
             response = requests.get(api_url, headers=headers, params=params)
@@ -62,6 +73,7 @@ def run_bot(
 
 if __name__ == '__main__':
     load_dotenv()
+    logger = get_logger()
     devman_token = getenv('DEVMAN_TOKEN')
     chat_id = getenv('TELEGRAM_CHANNEL_NAME')
     bot_token = getenv('TELEGRAM_BOT_TOKEN')
