@@ -3,7 +3,6 @@ from requests import ConnectionError
 from requests import ReadTimeout
 from requests import HTTPError
 from dotenv import load_dotenv
-from os import environ
 from os import getenv
 import telegram
 from telegram.error import NetworkError
@@ -11,21 +10,7 @@ import time
 import logging
 
 
-def get_logger():
-    logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
-    handler = logging.StreamHandler()
-    handler.setLevel(logging.DEBUG)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-    return logger
-
-
 def send_to_telegram(text, chat_id, token):
-    # http://spys.one/proxys/US/
-    # proxy_url = getenv('HTTPS_PROXY')
-    # environ['HTTPS_PROXY'] = proxy_url
     bot.send_message(chat_id=chat_id, text=text)
 
 
@@ -40,10 +25,9 @@ def run_bot(
     devman_url = 'https://dvmn.org/'
     headers = {'Authorization': 'Token {}'.format(devman_token)}
     params = {'timestamp': ''}
-    logger.info("Бот запущен")
+    logger.info("Бот запущен!")
     while True:
         try:
-            a = 1/0
             response = requests.get(api_url, headers=headers, params=params)
             response.raise_for_status()
             json_data = response.json()
@@ -64,13 +48,14 @@ def run_bot(
             if json_data['status'] == 'timeout':
                 params['timestamp'] = json_data['timestamp_to_request']
         except (ConnectionError, ReadTimeout, HTTPError) as error:
-            print(error)
+            logger.error("Возникла ошибка при обращении к {}:\n{}".format(
+                api_url,
+                error
+            ))
             time.sleep(5)
         except NetworkError as error:
-            print('Error during send to Telegram :\n{}'.format(error))
+            print('Возникла ошибка при обращении к Telegram :\n{}'.format(error))
             time.sleep(5)
-        except ZeroDivisionError as e:
-            logger.error(e)
 
 
 if __name__ == '__main__':
@@ -93,9 +78,8 @@ if __name__ == '__main__':
             log_entry.format('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
             bot.send_message(chat_id=chat_id, text=log_entry)
 
-
     logger = logging.getLogger('BotLogger')
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.DEBUG)
     logger.addHandler(BotLogger())
     run_bot(
         devman_token=devman_token,
