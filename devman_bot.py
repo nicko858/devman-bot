@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 from os import getenv
 import telegram
 from telegram.error import NetworkError
-import traceback
 import time
 import logging
 
@@ -51,7 +50,7 @@ def run_bot(
             time.sleep(5)
         except NetworkError as error:
             print('Возникла ошибка при обращении к Telegram :\n{}'.format(
-                traceback.print_exc()
+                error
             ))
             time.sleep(5)
 

@@ -8,6 +8,7 @@ The script uses following external API's:
 - [devman-api](https://dvmn.org/api/long_polling)
 
 Once, you run the script you'll receive notification messages to your telegram account.
+If something wrong happen, during invoking [devman-api](https://dvmn.org/api/long_polling), bot will send you log-error messages.
 
 ## How to install
 Python3 should be already installed.
