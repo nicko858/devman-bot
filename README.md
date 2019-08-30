@@ -42,6 +42,18 @@ HTTPS_PROXY=<proxy address from spys.one>
 ```bash
     python devman_bot.py
  ```
+ 
+ ## How to deploy
+ - Fork current repository
+ - Make sure, that you have `Procfile` in the repo root and it has this inside:
+   ```  bot: python3 devman_bot.py ```
+ - Create account on [heroku](https://id.heroku.com) or use existing
+ - Create new app and connect your github-account
+ - After successfull github connection, go to `deploy section`
+ - Choose `Manual deploy` and click `Deploy Branch`(by default -from master) 
+ - After successfull deploy, go to `Settings` and create environment variables in `Config Vars` section (like `.env-file` from Telegram instructions)
+ - Go to `Resources` and make sure that you have ``` bot: python3 devman_bot.py ``` in `Free Dynos` - section
+ - Run bot by clicking pencil-icon
 
 
 ### Project Goals
