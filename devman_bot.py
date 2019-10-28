@@ -54,6 +54,7 @@ def run_bot(
                             attempt['lesson_title'],
                             devman_url
                         )
+                    logger.info(message)
                     bot.send_message(chat_id=chat_id, text=message)
                 params['timestamp'] = json_data['last_attempt_timestamp']
             if json_data['status'] == 'timeout':
