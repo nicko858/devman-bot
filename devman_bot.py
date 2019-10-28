@@ -8,6 +8,22 @@ import telegram
 from telegram.error import NetworkError
 import time
 import logging
+from logging.handlers import RotatingFileHandler
+
+
+def set_logger():
+    # It means DEBUG level - https://docs.python.org/3.6/library/logging.html#levels
+    log_level = 10
+    logger = logging.getLogger("devman_bot_logger")
+    max_file_size = 1024 * 1024 * 10
+    log_path = 'bot.log'
+    if not len(logger.handlers):
+        logger.setLevel(log_level)
+        formatter = logging.Formatter('%(asctime)s - %(filename)s --> %(funcName)s - %(levelname)s - %(message)s')
+        handler = RotatingFileHandler(log_path, maxBytes=max_file_size, backupCount=3, encoding='utf-8')
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+    return logger
 
 
 def run_bot(
@@ -49,7 +65,7 @@ def run_bot(
             ))
             time.sleep(5)
         except NetworkError as error:
-            print('Возникла ошибка при обращении к Telegram :\n{}'.format(
+            logger.error('Возникла ошибка при обращении к Telegram :\n{}'.format(
                 error
             ))
             time.sleep(5)
@@ -69,15 +85,7 @@ if __name__ == '__main__':
 
     bot = telegram.Bot(token=bot_token)
 
-    class BotLogger(logging.Handler):
-        def emit(self, record):
-            log_entry = self.format(record)
-            log_entry.format('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-            bot.send_message(chat_id=chat_id, text=log_entry)
-
-    logger = logging.getLogger('BotLogger')
-    logger.setLevel(logging.DEBUG)
-    logger.addHandler(BotLogger())
+    logger = set_logger()
     run_bot(
         devman_token=devman_token,
         chat_id=chat_id,
