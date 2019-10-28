@@ -16,7 +16,7 @@ def set_logger():
     log_level = 10
     logger = logging.getLogger("devman_bot_logger")
     max_file_size = 1024 * 1024 * 10
-    log_path = 'bot.log'
+    log_path = os.path.join(bot_home, 'bot.log')
     if not len(logger.handlers):
         logger.setLevel(log_level)
         formatter = logging.Formatter('%(asctime)s - %(filename)s --> %(funcName)s - %(levelname)s - %(message)s')
@@ -75,6 +75,7 @@ def run_bot(
 if __name__ == '__main__':
     load_dotenv()
     devman_token = getenv('DEVMAN_TOKEN')
+    bot_home = getenv('BOT_HOME')
     chat_id = getenv('TELEGRAM_CHANNEL_NAME')
     bot_token = getenv('TELEGRAM_BOT_TOKEN')
     bad_message = 'У вас проверили работу "{}"\n' \
