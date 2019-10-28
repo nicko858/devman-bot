@@ -4,6 +4,7 @@ from requests import ReadTimeout
 from requests import HTTPError
 from dotenv import load_dotenv
 from os import getenv
+import os
 import telegram
 from telegram.error import NetworkError
 import time
