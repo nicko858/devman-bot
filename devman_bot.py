@@ -40,9 +40,11 @@ def run_bot(
     logger.info("Бот запущен!")
     while True:
         try:
+            logger.info("Запрос к devman:{} {}".format(api_url, params))
             response = requests.get(api_url, headers=headers, params=params)
             response.raise_for_status()
             json_data = response.json()
+            logger.info("Devman ответил: {}".format(json_data))
             if json_data['status'] == 'found':
                 for attempt in json_data['new_attempts']:
                     if attempt['is_negative']:
