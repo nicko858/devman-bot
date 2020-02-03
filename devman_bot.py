@@ -40,7 +40,7 @@ def run_bot(
     logger.info("Бот запущен!")
     while True:
         try:
-            logger.info("Запрос к devman:{} {}".format(api_url, params))
+            logger.info("Запрос к devman: {} {}".format(api_url, params))
             response = requests.get(api_url, headers=headers, params=params)
             response.raise_for_status()
             json_data = response.json()
